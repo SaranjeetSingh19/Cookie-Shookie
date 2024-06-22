@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @font-face {
+    font-family: "Chillax Semibold";
+    src: url("../public/Chillax-Medium.ttf") format(".ttf");
+  } */
+  
+  body {
+    font-family: "Chillax Semibold", "Gilroy ExtraBold", "Roboto Flex" !important;
+  }
+  
