@@ -1,36 +1,12 @@
-import { Heart, HeartPulseIcon, Search, Soup } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
 import { randomColor } from "../utils/randomColor";
-
-const APP_ID = import.meta.env.VITE_APP_ID;
-const APP_KEY = import.meta.env.VITE_APP_KEY
+import DishDetailPage from "./DishDetailPage";
+import { RecipesContext } from "../context/RecipesContext";
 
 const Homepage = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchRecipes = async (searchQuery) => {
-    setLoading(true);
-    setRecipes([]);
-
-    try {
-      const res = await fetch(
-        `https://api.edamam.com/api/recipes/v2/?app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchQuery}&type=public`
-      );
-      const data = await res.json();
-      setRecipes(data.hits);
-      console.log(recipes);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRecipes("paneer");
-  }, []);
+  const { recipes, fetchRecipes, loading } = useContext(RecipesContext);
 
   const submitHandler = (e) => {
     e.preventDefault();

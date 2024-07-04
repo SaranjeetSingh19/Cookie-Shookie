@@ -1,11 +1,15 @@
-import { Heart, HeartPulseIcon, Soup } from "lucide-react";
+import { Heart, HeartPulseIcon, Soup, Youtube } from "lucide-react";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DishDetailPage from "../Pages/DishDetailPage";
 
 const twoArrValues = (arr) => {
   return [arr[0], arr[1]];
 };
 
 const RecipeCard = ({ recipe, bg, badge }) => {
+  const navigate = useNavigate();
+
   const healthLabel = twoArrValues(recipe.healthLabels);
 
   const [isFav, setIsFav] = useState(
@@ -26,23 +30,26 @@ const RecipeCard = ({ recipe, bg, badge }) => {
     localStorage.setItem("favourites", JSON.stringify(favourites));
   };
 
+ 
+
+  const handleCardClick = (uri) => {
+    navigate(`/dish/${encodeURIComponent(uri)}`);
+  };
+
   return (
     <div
+    onClick={() => handleCardClick(recipe?.uri)}
       className={`flex flex-col rounded-md ${bg} overflow-hidden p-3 relative hover:scale-105 shadow-md transform transition duration-300 ease-in-out hover:shadow-lg`}
     >
-      <a
-        href={`https://www.youtube.com/results?search_query=${recipe.label} recipe`}
-        target="_blank"
-        className="relative h-32"
-      >
+      <div className="relative h-32">
         <div className="skeleton absolute inset-0" />
         <img
           src={recipe?.image}
           alt="recipe img"
           className="rounded-md w-full h-full object-cover cursor-pointer opacity-0 transition-opacity duration-400"
           onLoad={(e) => {
-            e.currentTarget.style.opacity = 1
-            e.currentTarget.previousElementSibling.style.display = "none"
+            e.currentTarget.style.opacity = 1;
+            e.currentTarget.previousElementSibling.style.display = "none";
           }}
         />
         <div
@@ -64,14 +71,9 @@ const RecipeCard = ({ recipe, bg, badge }) => {
               className="hover:fill-rose-400 hover:text-rose-500"
             />
           )}
-          {isFav && (
-            <Heart
-              size={20}
-              className="fill-rose-600 text-rose-500"
-            />
-          )}
+          {isFav && <Heart size={20} className="fill-rose-600 text-rose-500" />}
         </div>
-      </a>
+      </div>
 
       <div className="flex mt-1">
         <p className="font-bold tracking-wide">{recipe.label}</p>
@@ -83,7 +85,7 @@ const RecipeCard = ({ recipe, bg, badge }) => {
         Kitchen
       </p>
 
-      <div className="flex gap-2 mt-auto">
+      <div className="flex justify-around mt-auto">
         {healthLabel.map((label, i) => (
           <div
             key={i}
@@ -95,7 +97,19 @@ const RecipeCard = ({ recipe, bg, badge }) => {
             </span>
           </div>
         ))}
+        <a
+          href={`https://www.youtube.com/results?search_query=${recipe.label} recipe`}
+          target="_blank"
+          className="relative"
+        >
+          <div className="hover:scale-125 transition ease-in duration-75">
+            <Youtube />
+          </div>
+        </a>
       </div>
+      <div className="hidden">
+          <DishDetailPage rec={recipe} />
+        </div>
     </div>
   );
 };
